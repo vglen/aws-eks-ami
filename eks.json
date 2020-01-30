@@ -1,0 +1,56 @@
+{
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "region": "us-east-2",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "amazon-eks-node-1.14-v*",
+                    "root-device-type": "ebs"
+                },
+                "owners": [
+                    "602401143452"
+                ],
+                "most_recent": true
+            },
+            "instance_type": "t3.medium",
+            "spot_price": "0.03",
+            "ssh_username": "ec2-user",
+            "ssh_interface": "public_ip",
+            "ami_name": "shark-eks-1.14-{{isotime \"200601021504\"}}",
+            "ami_description": "Optimized EKS AMI, patched on ISO date.",
+            "security_group_ids": [
+                "sg-0671f922133e1b61c"
+            ],
+            "subnet_filter": {
+                "filters": {
+                    "tag:packer.builder": "true"
+                },
+                "most_free": true,
+                "random": false
+            },
+            "vpc_filter": {
+                "filters": {
+                    "tag-key": "packer.builder",
+                    "isDefault": "false"
+                }
+            },
+            "associate_public_ip_address": true,
+            "encrypt_boot": true,
+            "kms_key_id": "arn:aws:kms:us-east-2:274118048627:key/e997587a-a3af-4904-a522-08f9f8d9d0a7",
+            "tags": {
+                "OS_Version": "Amazon Linux 2",
+                "Packer": "v1.5.1",
+                "Name": "shark-eks-1.14-{{isotime \"200601021504\"}}",
+                "ImagedBy": "Packer"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "scripts/os_patch_installs.sh"
+        }
+    ]
+}
