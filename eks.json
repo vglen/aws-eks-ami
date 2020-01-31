@@ -20,9 +20,11 @@
             "ssh_interface": "public_ip",
             "ami_name": "shark-eks-1.14-{{isotime \"200601021504\"}}",
             "ami_description": "Optimized EKS AMI, patched on ISO date.",
-            "security_group_ids": [
-                "sg-0671f922133e1b61c"
-            ],
+            "security_group_filter": {
+                "filters": {
+                    "tag:packer.builder": "true"
+                }
+            },
             "subnet_filter": {
                 "filters": {
                     "tag:packer.builder": "true"
